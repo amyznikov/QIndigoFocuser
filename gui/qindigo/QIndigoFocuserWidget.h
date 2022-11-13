@@ -50,6 +50,7 @@ protected:
   void moveFocusOutward(int steps);
   void enumerateCurrentDeviceProperties();
 
+
 protected slots:
   void onIndigoClientAttach();
   void onIndigoClientDefineProperty(const indigo_device * device, const indigo_property * property, const QString & message);

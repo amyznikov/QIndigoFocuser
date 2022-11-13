@@ -537,12 +537,12 @@ void QIndigoFocuserWidget::onupdatecontrols()
           QString("%1").arg(focuser_position.value);
     }
 
-    //    if ( focuser_limits.defined ) {
-    //      statusText +=
-    //          QString(" [%1:%2]")
-    //            .arg(focuser_limits.min_value)
-    //            .arg(focuser_limits.max_value);
-    //    }
+    if( focuser_limits.defined ) {
+      statusText +=
+          QString(" [%1:%2]")
+              .arg(focuser_limits.min_value)
+              .arg(focuser_limits.max_value);
+    }
 
     status_ctl->setText(statusText);
     setEnabled(true);
