@@ -385,8 +385,8 @@ QIndigoFocuserWidget::QIndigoFocuserWidget(QWidget * parent) :
   connect(focuserPositionMoveToMaxPosition_ctl, &QToolButton::clicked,
       this, &ThisClass::onFocuserPositionMoveToMaxPositionClicked);
 
-  connect(focuserSpeed_ctl, &QSpinBox::valueChanged,
-      this, &ThisClass::onFocuserSpeedControlValueChanged);
+  connect(focuserSpeed_ctl, SIGNAL(valueChanged(int)),
+      this, SLOT(onFocuserSpeedControlValueChanged(int)));
 
   connect(focuserStepsMoveInward_ctl, &QToolButton::clicked,
       this, &ThisClass::onFocuserStepsMoveInwardClicked);
@@ -1247,26 +1247,34 @@ void QIndigoFocuserWidget::onFocuserStepsMoveOutward4xClicked()
 //////////////////////////////////////////////////////////////////////////
 // FOCUSER SPEED
 
+void QIndigoFocuserWidget::setFocuserSpeed(int value)
+{
+  if( value != focuser_speed.value ) {
+
+    indigo_result status =
+        client_->change_number_property(
+            currentDeviceName_.toUtf8().constData(),
+            FOCUSER_SPEED_PROPERTY_NAME,
+            FOCUSER_SPEED_ITEM_NAME,
+            value);
+
+    if( status != INDIGO_OK ) {
+
+      INDIGO_ERROR("%s(): client_->change_number_property('%s') fails: "
+          "status=%d\n",
+          __func__,
+          FOCUSER_SPEED_PROPERTY_NAME,
+          status);
+    }
+  }
+}
+
+
 void QIndigoFocuserWidget::onFocuserSpeedControlValueChanged(int value)
 {
-  if( focuser_speed.defined && focuser_speed.state != INDIGO_BUSY_STATE ) {
-    if( value != focuser_speed.value ) {
-
-      indigo_result status =
-          client_->change_number_property(
-              currentDeviceName_.toUtf8().constData(),
-              FOCUSER_SPEED_PROPERTY_NAME,
-              FOCUSER_SPEED_ITEM_NAME,
-              value);
-
-      if( status != INDIGO_OK ) {
-
-        INDIGO_ERROR("%s(): client_->change_number_property('%s') fails: "
-            "status=%d\n",
-            __func__,
-            FOCUSER_SPEED_PROPERTY_NAME,
-            status);
-      }
+  if( isConnected() && focuser_speed.defined && focuser_speed.state != INDIGO_BUSY_STATE ) {
+    if( value >= focuser_speed.min_value && value <= focuser_speed.max_value ) {
+      setFocuserSpeed(value);
     }
   }
 }
@@ -1321,52 +1329,28 @@ void QIndigoFocuserWidget::mouseDoubleClickEvent(QMouseEvent *event)
 
 void QIndigoFocuserWidget::mouseMoveEvent(QMouseEvent *event)
 {
-  // CF_DEBUG("H");
   Base::mouseMoveEvent(event);
 }
 
 #if QT_CONFIG(wheelevent)
 void QIndigoFocuserWidget::wheelEvent(QWheelEvent * event)
 {
-  if( enableMouse_ctl->isChecked() && !event->buttons() ) {
+  if( isConnected() && focuser_speed.defined && focuser_speed.state != INDIGO_BUSY_STATE ) {
 
-    if( wheel_steps_acc_started_ ) {
+    const int steps =
+        event->angleDelta().y() / QWheelEvent::DefaultDeltasPerStep;
 
-      wheel_steps_ +=
-          event->angleDelta().y() / QWheelEvent::DefaultDeltasPerStep;
-
+    if( steps > 0 ) {
+      if( focuser_speed.value < focuser_speed.max_value ) {
+        setFocuserSpeed(focuser_speed.value + 1);
+        return;
+      }
     }
-    else if( canMoveFocusNow() ) {
-
-      wheel_steps_acc_started_ = true;
-      wheel_steps_ = event->angleDelta().y() / QWheelEvent::DefaultDeltasPerStep;
-
-      QTimer::singleShot(250,
-          [this]() {
-
-            if( wheel_steps_acc_started_ ) {
-
-              const int steps =
-                  wheel_steps_;
-
-              if ( steps != 0 && canMoveFocusNow() ) {
-
-                if( steps < 0 ) {
-
-                  moveFocusInward((std::min)(10, -steps));
-
-                }
-                else if( steps > 0 ) {
-
-                  moveFocusOutward((std::min)(10, steps));
-
-                }
-              }
-
-              wheel_steps_acc_started_ = false;
-              wheel_steps_ = 0;
-            }
-          });
+    else if( steps < 0 ) {
+      if( focuser_speed.value > focuser_speed.min_value ) {
+        setFocuserSpeed(focuser_speed.value - 1);
+        return;
+      }
     }
   }
 

@@ -49,6 +49,7 @@ protected:
   void moveFocusInward(int steps);
   void moveFocusOutward(int steps);
   void enumerateCurrentDeviceProperties();
+  void setFocuserSpeed(int value);
 
 
 protected slots:
@@ -193,8 +194,6 @@ protected:
 
 
 #if QT_CONFIG(wheelevent)
-  int wheel_steps_  = 0;
-  bool wheel_steps_acc_started_ = false;
   QCheckBox * enableMouse_ctl = Q_NULLPTR;
 #endif
 
