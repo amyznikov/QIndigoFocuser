@@ -101,16 +101,12 @@ static void init_resources()
 
 static void enableControl(QWidget * w, bool enabled )
 {
-  if ( w->isEnabled() != enabled ) {
-    w->setEnabled(enabled);
-  }
+  w->setEnabled(enabled);
 }
 
 static void enableControl(QAbstractButton * w, bool enabled, const QIcon & icon)
 {
-  if ( w->isEnabled() != enabled ) {
-    w->setEnabled(enabled);
-  }
+  w->setEnabled(enabled);
   if ( w->icon().cacheKey() != icon.cacheKey() ){
     w->setIcon(icon);
   }
@@ -691,7 +687,7 @@ void QIndigoFocuserWidget::updateCurrentDeviceProperties(const indigo_property *
       }
 
       if ( has_changes ) {
-        emit focuserConnectionStateChanged();
+        Q_EMIT focuserConnectionStateChanged();
       }
     }
   }
@@ -709,7 +705,7 @@ void QIndigoFocuserWidget::updateCurrentDeviceProperties(const indigo_property *
         focuser_direction.defined = true;
       }
 
-      emit focuserMoveDirectionChanged();
+      Q_EMIT focuserMoveDirectionChanged();
     }
 
   }
@@ -732,7 +728,7 @@ void QIndigoFocuserWidget::updateCurrentDeviceProperties(const indigo_property *
         focuser_position.defined = true;
       }
 
-      emit focuserPositionChanged();
+      Q_EMIT focuserPositionChanged();
     }
 
   }
@@ -753,7 +749,7 @@ void QIndigoFocuserWidget::updateCurrentDeviceProperties(const indigo_property *
         focuser_limits.defined = true;
       }
 
-      emit focuserLimitsChanged();
+      Q_EMIT focuserLimitsChanged();
     }
   }
 
@@ -777,7 +773,7 @@ void QIndigoFocuserWidget::updateCurrentDeviceProperties(const indigo_property *
         focuser_steps.defined = true;
       }
 
-      emit focuserStepsChanged();
+      Q_EMIT focuserStepsChanged();
 
     }
 
@@ -802,7 +798,7 @@ void QIndigoFocuserWidget::updateCurrentDeviceProperties(const indigo_property *
         focuser_speed.defined = true;
       }
 
-      emit focuserSpeedChanged();
+      Q_EMIT focuserSpeedChanged();
     }
 
   }
@@ -820,7 +816,7 @@ void QIndigoFocuserWidget::updateCurrentDeviceProperties(const indigo_property *
         focuser_temperature.defined = true;
       }
 
-      emit focuserTemperatureChanged();
+      Q_EMIT focuserTemperatureChanged();
     }
 
   }

@@ -20,7 +20,7 @@ public:
   typedef QIndigoFocuserWidget ThisClass;
   typedef QSettingsWidget Base;
 
-  QIndigoFocuserWidget(QWidget * parent = Q_NULLPTR);
+  QIndigoFocuserWidget(QWidget * parent = nullptr);
   ~QIndigoFocuserWidget();
 
   void setIndigoClient(QIndigoClient * client);
@@ -30,7 +30,7 @@ public:
   bool canMoveFocusNow() const;
   bool isMovingFocusNow() const;
 
-signals:
+Q_SIGNALS:
   void focuserConnectionStateChanged();
   void focuserMoveDirectionChanged();
   void focuserPositionChanged();
@@ -75,9 +75,9 @@ protected:
     bool defined = false;
   } focuser_connection;
 
-  QComboBox * deviceSelector_ctl = Q_NULLPTR;
-  QToolButton * connectDisconnect_ctl = Q_NULLPTR;
-protected slots:
+  QComboBox * deviceSelector_ctl = nullptr;
+  QToolButton * connectDisconnect_ctl = nullptr;
+protected Q_SLOTS:
   void onDeviceSelectorCurrentIndexChanged(int);
   void onConnectDiconnectButtonClicked();
 
@@ -95,8 +95,8 @@ protected:
     bool defined = false;
   } focuser_limits;
 
-  QLineEditBox * focuserLimits_ctl = Q_NULLPTR;
-  // QToolButton * focuserLimitsApply_ctl = Q_NULLPTR;
+  QLineEditBox * focuserLimits_ctl = nullptr;
+  // QToolButton * focuserLimitsApply_ctl = nullptr;
 
 protected slots:
   void onApplyFocusLimitsClicked();
@@ -113,10 +113,10 @@ protected:
     bool defined = false;
   } focuser_position;
 
-  QSpinBox * focuserPosition_ctl = Q_NULLPTR;
-  QToolButton * focuserPositionMoveToAbsolutePosition_ctl = Q_NULLPTR;
-  QToolButton * focuserPositionMoveToMinPosition_ctl = Q_NULLPTR;
-  QToolButton * focuserPositionMoveToMaxPosition_ctl = Q_NULLPTR;
+  QSpinBox * focuserPosition_ctl = nullptr;
+  QToolButton * focuserPositionMoveToAbsolutePosition_ctl = nullptr;
+  QToolButton * focuserPositionMoveToMinPosition_ctl = nullptr;
+  QToolButton * focuserPositionMoveToMaxPosition_ctl = nullptr;
 
 protected slots:
   void onFocuserPositionMoveToAbsolutePositionClicked();
@@ -140,11 +140,11 @@ protected:
     bool defined = false;
   } focuser_steps;
 
-  QSpinBox * focuserSteps_ctl = Q_NULLPTR;
-  QToolButton * focuserStepsMoveInward_ctl = Q_NULLPTR;
-  QToolButton * focuserStepsMoveInward4x_ctl = Q_NULLPTR;
-  QToolButton * focuserStepsMoveOutward_ctl = Q_NULLPTR;
-  QToolButton * focuserStepsMoveOutward4x_ctl = Q_NULLPTR;
+  QSpinBox * focuserSteps_ctl = nullptr;
+  QToolButton * focuserStepsMoveInward_ctl = nullptr;
+  QToolButton * focuserStepsMoveInward4x_ctl = nullptr;
+  QToolButton * focuserStepsMoveOutward_ctl = nullptr;
+  QToolButton * focuserStepsMoveOutward4x_ctl = nullptr;
 protected slots:
   void onFocuserStepsMoveInwardClicked();
   void onFocuserStepsMoveInward4xClicked();
@@ -163,7 +163,7 @@ protected:
     bool defined = false;
   } focuser_speed;
 
-  QSpinBox * focuserSpeed_ctl = Q_NULLPTR;
+  QSpinBox * focuserSpeed_ctl = nullptr;
 protected slots:
   void onFocuserSpeedControlValueChanged(int value);
 
@@ -186,15 +186,15 @@ protected: // overrides
 #endif
 
 protected:
-  QIndigoClient * client_ = Q_NULLPTR;
+  QIndigoClient * client_ = nullptr;
   QString currentDeviceName_;
-  QLabel * status_ctl = Q_NULLPTR;
-  QLabel * temperature_ctl = Q_NULLPTR;
+  QLabel * status_ctl = nullptr;
+  QLabel * temperature_ctl = nullptr;
   std::mutex mtx_;
 
 
 #if QT_CONFIG(wheelevent)
-  QCheckBox * enableMouse_ctl = Q_NULLPTR;
+  QCheckBox * enableMouse_ctl = nullptr;
 #endif
 
 };
